@@ -2,6 +2,7 @@ package com.example.gateway;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
@@ -17,9 +18,10 @@ public class SecurityConfig {
         return http
                 .headers(headers -> headers.contentSecurityPolicy("script-src 'self'"))
                 .authorizeExchange(exchange -> exchange
-                        .pathMatchers("/**").permitAll()
+//                        .pathMatchers("/**").permitAll()
                         .anyExchange().authenticated())
                 .csrf(csrf -> csrf.csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse()))
+                .formLogin(Customizer.withDefaults())
                 .build();
     }
 }
