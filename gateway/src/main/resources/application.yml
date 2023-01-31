@@ -1,0 +1,28 @@
+server:
+  port: 8000
+
+spring:
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOriginPatterns: http://frontend:[*],http://gateway:[*]
+            allowedHeaders: "*"
+            allowedMethods: "*"
+            allowCredentials: true
+      routes:
+        - id: get_demo
+          uri: http://localhost:8080
+          predicates:
+            - Method=GET
+            - Path=/get
+        - id: post_demo
+          uri: http://localhost:8080
+          predicates:
+            - Method=POST
+            - Path=/post
+        - id: frontend
+          uri: http://frontend:4200
+          predicates:
+            - Path=/**
