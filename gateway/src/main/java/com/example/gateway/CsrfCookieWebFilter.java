@@ -1,7 +1,6 @@
 package com.example.gateway;
 
 import org.springframework.boot.web.server.Cookie;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.web.server.csrf.CsrfToken;
 import org.springframework.stereotype.Component;
@@ -13,7 +12,6 @@ import reactor.core.publisher.Mono;
 import java.time.Duration;
 
 @Component
-@Configuration
 public class CsrfCookieWebFilter implements WebFilter {
 
     @Override
@@ -21,13 +19,15 @@ public class CsrfCookieWebFilter implements WebFilter {
         String key = CsrfToken.class.getName();
         Mono<CsrfToken> csrfToken = null != exchange.getAttribute(key) ? exchange.getAttribute(key) : Mono.empty();
         return csrfToken.doOnSuccess(token -> {
-            ResponseCookie cookie = ResponseCookie.from("XSRF-TOKEN", token.getToken())
+            ResponseCookie cookie = ResponseCookie.from("X-XSRF-TOKEN", token.getToken())
                     .maxAge(Duration.ofHours(1))
                     .httpOnly(false)
+//                    .secure(true) must be enabled for production use
                     .path("/")
-                    .sameSite(Cookie.SameSite.LAX.attributeValue())
+//                    .sameSite(Cookie.SameSite.LAX.attributeValue())
+                    .sameSite(Cookie.SameSite.STRICT.attributeValue())
                     .build();
-            exchange.getResponse().getCookies().add("XSRF-TOKEN", cookie);
+            exchange.getResponse().getCookies().add("X-XSRF-TOKEN", cookie);
         }).then(chain.filter(exchange));
     }
 }

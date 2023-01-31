@@ -26,3 +26,8 @@ spring:
           uri: http://frontend:4200
           predicates:
             - Path=/**
+
+logging:
+  level:
+    org.springframework.security: INFO
+    org.springframework.cloud.gateway: DEBUG

@@ -15,6 +15,7 @@ public class SecurityConfig {
     SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http) throws Exception {
 
         return http
+                .headers(headers -> headers.contentSecurityPolicy("script-src 'self'"))
                 .authorizeExchange(exchange -> exchange
                         .pathMatchers("/**").permitAll()
                         .anyExchange().authenticated())
