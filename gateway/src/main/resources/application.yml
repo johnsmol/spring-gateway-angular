@@ -2,6 +2,19 @@ server:
   port: 8000
 
 spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          gateway-client:
+            provider: spring-auth-server
+            client-id: gateway
+            client-secret: secret
+            authorization-grant-type: authorization_code
+            scope: openid,offline_access
+        provider:
+          spring-auth-server:
+            issuer-uri: http://auth-server:9000
   cloud:
     gateway:
       globalcors:
@@ -17,15 +30,21 @@ spring:
           predicates:
             - Method=GET
             - Path=/get
+          filters:
+            - TokenRelay=
         - id: post_demo
           uri: http://localhost:8080
           predicates:
             - Method=POST
             - Path=/post
+          filters:
+            - TokenRelay=
         - id: frontend
           uri: http://frontend:4200
           predicates:
             - Path=/**
+          filters:
+            - TokenRelay=
   data:
     redis:
       host: localhost
