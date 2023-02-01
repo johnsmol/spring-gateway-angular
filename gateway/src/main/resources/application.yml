@@ -32,6 +32,7 @@ spring:
             - Path=/get
           filters:
             - TokenRelay=
+            - SaveSession
         - id: post_demo
           uri: http://localhost:8080
           predicates:
@@ -39,12 +40,14 @@ spring:
             - Path=/post
           filters:
             - TokenRelay=
+            - SaveSession
         - id: frontend
           uri: http://frontend:4200
           predicates:
             - Path=/**
           filters:
             - TokenRelay=
+            - SaveSession
   data:
     redis:
       host: localhost
