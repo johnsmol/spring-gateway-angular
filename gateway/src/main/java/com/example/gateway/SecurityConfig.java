@@ -23,7 +23,6 @@ public class SecurityConfig {
         return http
                 .headers(headers -> headers.contentSecurityPolicy("script-src 'self'"))
                 .authorizeExchange(exchange -> exchange
-//                        .pathMatchers("/**").permitAll()
                         .anyExchange().authenticated())
                 .csrf(csrf -> csrf.csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse()))
                 .oauth2Login(login -> login.authorizationRequestResolver(pkceResolver))
