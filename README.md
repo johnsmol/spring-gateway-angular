@@ -25,8 +25,3 @@ Resource service will run on port 8080.
 Run ```npm start``` command.
 This will start the application with host ```frontend``` and port ```4200```.
 It also will load the ```proxy.conf.json``` necessary to reach the backend without CORS blocking the requests.
-
-
-### Limitations
-
-At the current state, the Angular frontend is not able to send POST requests to the backend because of an issue with CSRF token/configuration.
