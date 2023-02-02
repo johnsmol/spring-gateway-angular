@@ -1,0 +1,117 @@
+version: "3.8"
+
+services:
+  ### ----------
+  redis:
+    image: redis:latest
+    container_name: redis_2
+    ports:
+      - "6380:6379"
+    networks:
+      - local-testing
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+  ### ----------
+  authserver:
+    build:
+      context: authserver
+      dockerfile: Dockerfile
+    container_name: authserver
+    ports:
+      - "9000:9000"
+    depends_on:
+      - redis
+    expose:
+      - 9000
+    networks:
+      - local-testing
+    environment:
+      - AUTHSERVER_ISSUER=http://authserver:9000
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+  ### ----------
+  gateway:
+    build:
+      context: gateway
+      dockerfile: Dockerfile
+    container_name: gateway
+    command:
+      - npm start
+    depends_on:
+      - redis
+      - authserver
+    expose:
+      - 8000
+    ports:
+      - "8000:8000"
+    networks:
+      - local-testing
+    environment:
+      - GATEWAY_AUTHSERVER_ISSUER_URI=http://authserver:9000
+      - GATEWAY_RESOURCE_URI=http://resource:8080
+      - GATEWAY_FRONTEND_URI=http://frontend:4200
+      - GATEWAY_REDIS_HOST=redis
+      - GATEWAY_REDIS_PORT=6379
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+  ### ----------
+  resource:
+    build:
+      context: resource
+      dockerfile: Dockerfile
+    container_name: resource
+    depends_on:
+      - redis
+      - gateway
+      - authserver
+    expose:
+      - 8080
+    networks:
+      - local-testing
+    environment:
+      - RESOURCE_AUTHSERVER_ISSUER_URI=http://authserver:9000
+      - RESOURCE_JWKS_URI=http://authserver:9000/oauth2/jwks
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+  ### ----------
+  frontend:
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    depends_on:
+      - redis
+      - gateway
+      - authserver
+      - resource
+    expose:
+      - 4200
+    volumes:
+      - ./frontend:/app
+    networks:
+      - local-testing
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+### ----------
+networks:
+  local-testing:

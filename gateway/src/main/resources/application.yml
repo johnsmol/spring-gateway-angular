@@ -14,7 +14,8 @@ spring:
             scope: openid,offline_access
         provider:
           spring-auth-server:
-            issuer-uri: http://auth-server:9000
+            issuer-uri: ${GATEWAY_AUTHSERVER_ISSUER_URI:http://authserver:9000}
+#            issuer-uri: ${GATEWAY_AUTHSERVER_ISSUER_URI}
   cloud:
     gateway:
       globalcors:
@@ -26,7 +27,7 @@ spring:
             allowCredentials: true
       routes:
         - id: get_demo
-          uri: http://localhost:8080
+          uri: ${GATEWAY_RESOURCE_URI:http://localhost:8080}
           predicates:
             - Method=GET
             - Path=/get
@@ -34,7 +35,7 @@ spring:
             - TokenRelay=
             - SaveSession
         - id: post_demo
-          uri: http://localhost:8080
+          uri: ${GATEWAY_RESOURCE_URI:http://localhost:8080}
           predicates:
             - Method=POST
             - Path=/post
@@ -42,7 +43,7 @@ spring:
             - TokenRelay=
             - SaveSession
         - id: frontend
-          uri: http://frontend:4200
+          uri: ${GATEWAY_FRONTEND_URI:http://frontend:4200}
           predicates:
             - Path=/**
           filters:
@@ -50,8 +51,8 @@ spring:
             - SaveSession
   data:
     redis:
-      host: localhost
-      port: 6379
+      host: ${GATEWAY_REDIS_HOST:localhost}
+      port: ${GATEWAY_REDIS_PORT:6379}
   session:
     store-type: redis
 

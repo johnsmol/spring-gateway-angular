@@ -5,6 +5,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -38,10 +39,14 @@ import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 @Configuration
 public class AuthServerConfig {
+
+    @Value("${props.issuer}")
+    private String issuer;
 
     @Bean
     @Order(1)
@@ -79,8 +84,8 @@ public class AuthServerConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("http://frontend:4200", "http:gateway:8000/**"));
-        configuration.setAllowedMethods(Arrays.asList("*"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowedMethods(List.of("*"));
+        configuration.setAllowedHeaders(List.of("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
@@ -126,7 +131,7 @@ public class AuthServerConfig {
     @Bean
     public AuthorizationServerSettings providerSettings() {
         return AuthorizationServerSettings.builder()
-                .issuer("http://auth-server:9000")
+                .issuer(issuer)
 //                .authorizationEndpoint("/oauth2/authorize")
 //                .tokenEndpoint("/oauth2/token")
 //                .jwkSetEndpoint("/oauth2/jwks")

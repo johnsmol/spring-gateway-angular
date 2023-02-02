@@ -1,2 +1,5 @@
 server:
   port: 9000
+
+props:
+  issuer: ${AUTHSERVER_ISSUER:http://authserver:9000}
