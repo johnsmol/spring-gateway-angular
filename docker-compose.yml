@@ -90,6 +90,30 @@ services:
         max_attempts: 3
         window: 120s
   ### ----------
+  resourcetwo:
+    build:
+      context: resourcetwo
+      dockerfile: Dockerfile
+    container_name: resourcetwo
+    depends_on:
+      - redis
+      - gateway
+      - authserver
+      - resource
+    expose:
+      - 8081
+    networks:
+      - local-testing
+    environment:
+      - RESOURCE_AUTHSERVER_ISSUER_URI=http://authserver:9000
+      - RESOURCE_JWKS_URI=http://authserver:9000/oauth2/jwks
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+  ### ----------
   frontend:
     build:
       context: frontend

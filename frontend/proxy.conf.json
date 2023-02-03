@@ -5,5 +5,12 @@
     "pathRewrite": {
       "^/api": ""
     }
+  },
+  "/resourcetwo": {
+    "target": "http://resourcetwo:8081",
+    "secure": false,
+    "pathRewrite": {
+      "^/resourcetwo": ""
+    }
   }
 }

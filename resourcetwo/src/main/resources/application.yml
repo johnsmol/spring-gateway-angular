@@ -1,0 +1,12 @@
+server:
+  port: 8081
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${RESOURCE_AUTHSERVER_ISSUER_URI:http://authserver:9000}
+
+props:
+  jwksUri: ${RESOURCE_JWKS_URI:http://authserver:9000/oauth2/jwks}

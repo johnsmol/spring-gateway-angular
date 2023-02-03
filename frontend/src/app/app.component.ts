@@ -24,4 +24,28 @@ export class AppComponent {
       .post('/api/post', null, { responseType: 'text', withCredentials: true })
       .subscribe();
   }
+
+  callServiceTwoGetDirect() {
+    console.log('direct GET to service two');
+    this.http
+      .get('/resourcetwo/get', {
+        responseType: 'text',
+        withCredentials: true,
+      })
+      .subscribe();
+  }
+
+  callServiceTwoIndirectly() {
+    console.log('indirect call to service two');
+    this.http
+      .get('/api/indirect', {
+        responseType: 'text',
+        withCredentials: true,
+      })
+      .subscribe();
+  }
+
+  clientget() {
+    this.http.get('/api/client-get', {responseType: 'text', withCredentials: true}).subscribe();
+  }
 }

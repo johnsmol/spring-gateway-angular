@@ -42,6 +42,14 @@ spring:
           filters:
             - TokenRelay=
             - SaveSession
+        - id: indirect_demo
+          uri: ${GATEWAY_RESOURCE_URI:http://localhost:8080}
+          predicates:
+            - Method=GET
+            - Path=/indirect
+          filters:
+            - TokenRelay=
+            - SaveSession
         - id: frontend
           uri: ${GATEWAY_FRONTEND_URI:http://frontend:4200}
           predicates:
