@@ -6,7 +6,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${RESOURCE_AUTHSERVER_ISSUER_URI:http://authserver:9000}
+#          issuer-uri: ${RESOURCE_AUTHSERVER_ISSUER_URI:http://authserver:9000}
+          issuer-uri: http://localhost:8001/realms/local
 
 props:
-  jwksUri: ${RESOURCE_JWKS_URI:http://authserver:9000/oauth2/jwks}
+  jwksUri: http://localhost:8001/realms/local/protocol/openid-connect/certs

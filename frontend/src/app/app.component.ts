@@ -44,8 +44,4 @@ export class AppComponent {
       })
       .subscribe();
   }
-
-  clientget() {
-    this.http.get('/api/client-get', {responseType: 'text', withCredentials: true}).subscribe();
-  }
 }

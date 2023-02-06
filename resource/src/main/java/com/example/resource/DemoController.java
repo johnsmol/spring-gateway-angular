@@ -23,7 +23,7 @@ public class DemoController {
     private RestTemplate restTemplate;
 
     @GetMapping(value = "/get")
-    public ResponseEntity<String> getDemo(@RequestHeader MultiValueMap<String, String> headers) {
+    public ResponseEntity<String> getDemo(@RequestHeader MultiValueMap<String, String> headers, @AuthenticationPrincipal Jwt token) {
         log.info("called /get");
 
         headers.forEach((key, value) -> {
@@ -36,6 +36,8 @@ public class DemoController {
 
         ResponseEntity<String> response = restTemplate.getForEntity("http://localhost:8081/get", String.class);
         log.info("indirect response: " + response.getBody());
+
+        log.info("authentication principal annotation: " + token.getTokenValue());
 
         return ResponseEntity.ok("GET demo");
     }
@@ -55,7 +57,8 @@ public class DemoController {
     public ResponseEntity<String> indirect(@AuthenticationPrincipal Jwt token) {
         log.info("calling resource two");
 
-        ResponseEntity<String> response = restTemplate.getForEntity("http://resourcetwo:8081/get", String.class);
+//        ResponseEntity<String> response = restTemplate.getForEntity("http://resourcetwo:8081/get", String.class);
+        ResponseEntity<String> response = restTemplate.getForEntity("http://localhost:8081/get", String.class);
 
         return response;
     }
