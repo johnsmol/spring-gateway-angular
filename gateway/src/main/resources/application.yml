@@ -50,6 +50,14 @@ spring:
           filters:
             - TokenRelay=
             - SaveSession
+        - id: auth_ping
+          uri: ${GATEWAY_RESOURCE_URI:http://authserver:9000/auth}
+          predicates:
+            - Method=GET
+            - Path=/api/v1/ping
+          filters:
+            - TokenRelay=
+            - SaveSession
         - id: frontend
           uri: ${GATEWAY_FRONTEND_URI:http://frontend:4200}
           predicates:

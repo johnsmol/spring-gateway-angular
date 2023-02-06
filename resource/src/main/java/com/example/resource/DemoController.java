@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
+
 @Slf4j
 @RestController
 public class DemoController {
@@ -30,7 +32,7 @@ public class DemoController {
 
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         var principal = authentication.getName();
-        log.info("principal: " + principal);
+        log.info("principal: " + principal + ", authorities: " + Arrays.toString(authentication.getAuthorities().toArray()));
 
         ResponseEntity<String> response = restTemplate.getForEntity("http://localhost:8081/get", String.class);
         log.info("indirect response: " + response.getBody());
