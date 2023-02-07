@@ -10,15 +10,15 @@ spring:
             provider: spring-auth-server
             client-id: gateway
             client-secret: jdVWF2X2MO5X6jVrg9DeJ6diN2iKX9Vo
-#            authorization-grant-type: authorization_code
-#            redirect-uri: "http://gateway:8000/login/oauth2/code/{registrationId}"
+            #            authorization-grant-type: authorization_code
+            #            redirect-uri: "http://gateway:8000/login/oauth2/code/{registrationId}"
             scope: openid
         provider:
           spring-auth-server:
-#            issuer-uri: ${GATEWAY_AUTHSERVER_ISSUER_URI:http://authserver:9000}
+            #            issuer-uri: ${GATEWAY_AUTHSERVER_ISSUER_URI:http://authserver:9000}
             issuer-uri: http://localhost:8001/realms/local
             user-name-attribute: preferred_username
-#            issuer-uri: ${GATEWAY_AUTHSERVER_ISSUER_URI}
+  #            issuer-uri: ${GATEWAY_AUTHSERVER_ISSUER_URI}
   cloud:
     gateway:
       globalcors:
